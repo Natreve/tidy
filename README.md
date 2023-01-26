@@ -1,14 +1,15 @@
-The PubSub emulator still not yet support scheduled functions.
+# Tidy
 
-But you can use firebase functions:shell and setInterval to simulate scheduler.
+Tidy is a telegram Bot designed to streamline the process of managing cleaning schedules for housekeepers. Tidy allows users to view and claim cleaning schedules, track the progress of each task and much more!
 
-NOTE: Please ensure you are running the firebase emulator locally, or the shell may call the functions in Production !!
+The PubSub emulator does not yet support scheduled functions.
 
+## Workaround
+
+```shell
 firebase functions:shell
 
 firebase > setInterval(() => yourScheduledFunc(), 60000)
-Don't exit, then it will run your functions every 60 seconds.
+```
 
-NOTE: functions ran in shell will not be shown in emulator's log.
-https://podzemski.com/2020/10/14/how-to-trigger-and-run-firebase-scheduled-functions-from-localhost/
-https://stackoverflow.com/questions/61253788/how-to-use-firebase-emulators-pubsub-to-test-timed-functions-locally
+This will run the taskRunner function every 60 seconds.
