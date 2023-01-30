@@ -12,6 +12,7 @@ module.exports = {
     PRESERVE_WEBPACK_CACHE: true,
   },
   plugins: [
+    `gatsby-plugin-firebase`,
     "gatsby-plugin-sass",
     "gatsby-plugin-image",
     "gatsby-plugin-sharp",

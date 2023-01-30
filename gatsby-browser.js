@@ -1,4 +1,4 @@
-import Provider from "services/Provider"
-import "./src/global.scss"
+import Provider from "services/Provider";
+import "./src/global.scss";
 
-export const wrapRootElement = Provider
+export const wrapRootElement = Provider;

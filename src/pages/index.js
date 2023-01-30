@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Router } from "@reach/router";
 import { Context } from "services/Provider";
-import Bookings from "views/Bookings";
 import Stocktaking from "views/Stocktaking";
+import TodoList from "views/Todo";
 const App = ({ location }) => {
   return (
     <Context.Consumer>
@@ -10,7 +10,7 @@ const App = ({ location }) => {
         return (
           <main>
             <Router>
-              <Bookings path="/*" ctx={ctx} />
+              <TodoList path="/*" ctx={ctx} />
               <Stocktaking path="/stocktaking" ctx={ctx} />
             </Router>
           </main>

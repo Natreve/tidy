@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as css from "./css.module.scss";
 import { DateTime } from "luxon";
+import telegramParamToJson from "utils/telegramParamToJson";
 const Card = (props) => {
   return (
     <div className={css.card}>
@@ -17,25 +18,38 @@ const Card = (props) => {
   );
 };
 const BookingCard = (props) => {
-  const { data: booking } = props;
+  const { data: booking, ctx } = props;
   const [claimed, setClaimed] = useState(props.claimed);
-  const date = DateTime.fromJSDate(new Date(booking.date)).toFormat(
-    "LLL dd, yyyy"
-  );
+  const date = DateTime.fromJSDate(booking.date.toDate()).toFormat("DDDD");
   const onBooking = () => {
-    props.onBooking({ ...booking, date: booking.date, claimed });
+    booking.options.claimed = claimed;
+    props.onBooking(booking);
   };
   const onClaim = (e) => {
     e.stopPropagation();
-    setClaimed(!claimed);
-    props.onClaim({ ...booking, date: booking.date, claimed: !claimed });
+    const initData = telegramParamToJson(ctx.Telegram.WebApp.initData);
+  
+    if (!booking.options.claimed) {
+      setClaimed(!claimed);
+      booking.options.claimed = !claimed;
+      props.onClaim(booking);
+      return;
+    }
+
+    if (booking.options.claimed === initData.user.id) {
+      setClaimed(!claimed);
+      booking.options.claimed = !claimed;
+      props.onClaim(booking);
+      return;
+    }
+    return;
   };
 
   return (
     <div className={css.card} onClick={onBooking}>
       <div className={css.content}>
         <div className={css.header}>
-          <h1>{booking.name}</h1>
+          <h1>{booking.options.name}</h1>
           <div className={css.meta}>{date}</div>
         </div>
       </div>

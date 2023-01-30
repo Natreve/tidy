@@ -55,28 +55,21 @@ class Todo extends React.Component {
 
       return { ...filter, active: false };
     });
-    // if (filteredBy === "Active") {
-    //   this.state.tasks.forEach((task) => {
-    //     if (!task.completed) filteredTasks.push(task);
-    //   });
-    // }
-    // if (filteredBy === "Completed") {
-    //   this.state.tasks.forEach((task) => {
-    //     if (task.completed) filteredTasks.push(task);
-    //   });
-    // }
-    // if (filteredBy === "All") filteredTasks = this.state.tasks;
-    // console.log(filteredTasks);
+
     this.setState({ filters });
   };
   onComplete = () => {
+    let payload = [];
     for (let index = 0; index < this.state.tasks.length; index++) {
       const task = this.state.tasks[index];
-      if (!task.completed) {
-        console.log("All tasks not completed");
-        break;
+      
+      if (task.completed) {
+        payload.push({ name: task.name, completed: true });
+        continue;
       }
+      payload.push({ name: task.name, completed: false });
     }
+    this.props.onComplete(payload);
   };
   render() {
     const { props, state, onStatusChange, filterTasks } = this;
@@ -84,11 +77,12 @@ class Todo extends React.Component {
     return (
       <div className={css.todo}>
         <div className={css.header}>
-          <h1>{props.header}</h1>
+          <h1>{props.name}</h1>
           <div className={css.tools}>
-            <div className={css.count}>{state.tasks.length} tasks</div>
+            <div className={css.count}>{props.id}</div>
+            {/* <div className={css.count}>{state.tasks.length} tasks</div> */}
             <div className={css.filters}>
-              {state.filters.map((filter, id) => {
+              {/* {state.filters.map((filter, id) => {
                 return (
                   <button
                     className={filter?.active ? css.active : ""}
@@ -98,14 +92,13 @@ class Todo extends React.Component {
                     {filter.name}
                   </button>
                 );
-              })}
+              })} */}
             </div>
           </div>
         </div>
         <div className={css.tasks}>
-          {state.filteredTasks.map((task, id) => {
+          {state.tasks.map((task, id) => {
             task.id = `${id}`;
-
             return <Task key={id} {...task} onStatusChange={onStatusChange} />;
           })}
         </div>
@@ -117,12 +110,14 @@ class Todo extends React.Component {
   }
 }
 Todo.propTypes = {
-  header: PropTypes.string,
+  name: PropTypes.string,
   tasks: PropTypes.array,
+  onComplete: PropTypes.func,
 };
 Todo.defaultProps = {
-  header: ``,
+  name: ``,
   tasks: [],
+  onComplete: () => {},
 };
 Task.propTypes = {
   id: PropTypes.string,

@@ -1,0 +1,21 @@
+{
+  "name": "@codesby/gatsby-plugin-firebase",
+  "description": "A Gatsby firebase plugin that implements firebase's verison 9 JSSDK.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "codesby",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-plugin-firebase",
+    "firebase"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"No build script setup\""
+  },
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^9.16.0"
+  }
+}

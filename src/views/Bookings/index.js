@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ical from "ical";
-import axios from "axios";
 import { BookingCard } from "components/Card";
-
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, updateDoc, doc } from "firebase/firestore";
+import telegramParamToJson from "utils/telegramParamToJson";
 // import { Router } from "@reach/router";
 import Todo from "components/Todo";
+
 // import Reservation from "./Reservation";
 // import Clockin from "./Clockin";
 
@@ -27,38 +28,7 @@ const Bookings = (props) => {
     //     }
     //   }
     // }
-    const events = [
-      {
-        id: "HMYZJZNPZN",
-        name: "Harbour View",
-        date: new Date("2023-01-24T04:00:00.000Z"),
-        claimed: false,
-      },
-      {
-        id: "HMW344N8ZN",
-        name: "Harbour View",
-        date: new Date("2023-01-30T04:00:00.000Z"),
-        claimed: false,
-      },
-      {
-        id: "HMYC33FZAX",
-        name: "Harbour View",
-        date: new Date("2023-03-22T04:00:00.000Z"),
-        claimed: false,
-      },
-      {
-        id: "HMT8BZENJM",
-        name: "Harbour View",
-        date: new Date("2023-03-24T04:00:00.000Z"),
-        claimed: false,
-      },
-      {
-        id: "HMPN9B8MNR",
-        name: "Harbour View",
-        date: new Date("2023-04-01T04:00:00.000Z"),
-        claimed: false,
-      },
-    ];
+    const events = [];
     setBookings(events);
 
     return events;
@@ -117,7 +87,7 @@ const Bookings = (props) => {
   //Function expected to fail in development environment
   const onBooking = (booking) => {
     try {
-      console.log(booking);
+     
       ctx.Telegram.WebApp.showConfirm(
         "Seleting this booking will clock you in automatically",
         (e) => {
@@ -127,22 +97,41 @@ const Bookings = (props) => {
     } catch (error) {}
   };
   //Function expected to fail in development environment
-  const onClaim = (booking) => {
-    console.log(booking);
-    // ctx.Telegram.WebApp.sendData(``);
+  const onClaim = async (booking) => {
+    const db = getFirestore();
+    const task = doc(db, "tasks", booking.id);
+    const initData = telegramParamToJson(ctx.Telegram.WebApp.initData);
+    ctx.Telegram.WebApp.sendData(
+      `${booking.id} was ${booking.options.claimed ? "claimed" : "unclaimed"}`
+    );
+    if (booking.options.claimed) {
+      return await updateDoc(task, { "options.claimed": initData.user.id });
+    }
+    await updateDoc(task, { "options.claimed": null });
   };
   useEffect(() => {
-    getBookings("Harbour View", process.env.HARBOURDRIVE);
+    // const db = getFirestore();
+    // const events = [];
+    // let q = query(collection(db, "tasks"), where("status", "==", "scheduled"));
+    // getDocs(q).then((querySnapshot) => {
+    //   querySnapshot.forEach((doc) => {
+    //     events.push(doc.data());
+    //   });
+    //   setBookings(events);
+    //   ctx.Telegram.WebApp.ready();
+    // });
   }, [ctx]);
 
   return (
     <section>
       {bookings.map((booking) => (
         <BookingCard
+          ctx={ctx}
           key={booking.id}
           data={booking}
           onBooking={onBooking}
           onClaim={onClaim}
+          claimed={booking.options.claimed}
         />
       ))}
       {/* <Todo header="Tue Jan 24 2023" tasks={tasks} /> */}
