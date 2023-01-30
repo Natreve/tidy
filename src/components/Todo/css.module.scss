@@ -83,9 +83,9 @@
         }
       }
 
-      // &:hover {
-      //   background-color: var(--tg-theme-secondary-bg-color, #f6fbff);
-      // }
+      &:hover {
+        background-color: var(--tg-theme-secondary-bg-color, #f6fbff);
+      }
     }
     .empty {
       height: 120px;
