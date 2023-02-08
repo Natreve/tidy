@@ -2,7 +2,7 @@
 import { CreateWebpackConfigArgs, PluginOptions } from "gatsby";
 
 const path = require(`path`);
-const onPreInit = () => console.log("Loaded @codesby/gatsby-plugin-firebase");
+exports.onPreInit = () => console.log("Loaded @codesby/gatsby-plugin-firebase");
 interface FirebaseCredentials extends PluginOptions {
   apiKey: string;
   authDomain: string;
@@ -12,7 +12,7 @@ interface FirebaseCredentials extends PluginOptions {
   messagingSenderId: string;
   appId: string;
 }
-const onCreateWebpackConfig = (
+exports.onCreateWebpackConfig = (
   args: CreateWebpackConfigArgs,
   options: FirebaseCredentials
 ) => {
@@ -42,4 +42,3 @@ const onCreateWebpackConfig = (
     ],
   });
 };
-export { onPreInit, onCreateWebpackConfig };

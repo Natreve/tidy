@@ -21,7 +21,7 @@
       align-items: center;
 
       &:hover {
-        background: var(--tg-theme-bg-color, --bg-color);
+        background: var(--bg-color);
       }
       cursor: pointer;
     }
