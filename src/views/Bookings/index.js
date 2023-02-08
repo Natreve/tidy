@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BookingCard } from "components/Card";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { getFirestore, updateDoc, doc } from "firebase/firestore";
-import telegramParamToJson from "utils/telegramParamToJson";
+import telegramParamToJson from "../../utils/telegramParamToJson";
 // import { Router } from "@reach/router";
 import Todo from "components/Todo";
 

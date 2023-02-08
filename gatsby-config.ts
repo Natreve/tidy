@@ -1,16 +1,17 @@
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 });
-module.exports = {
+import type { GatsbyConfig } from "gatsby";
+
+const config: GatsbyConfig = {
   siteMetadata: {
-    title: `codesby-telegram-house-keeping`,
+    title: `Tidy Calendar`,
     siteUrl: `https://www.yourdomain.tld`,
   },
-  flags: {
-    FAST_DEV: true,
-    DEV_SSR: false,
-    PRESERVE_WEBPACK_CACHE: true,
-  },
+  // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
+  // If you use VSCode you can also use the GraphQL plugin
+  // Learn more at: https://gatsby.dev/graphql-typegen
+  graphqlTypegen: true,
   plugins: [
     `gatsby-plugin-firebase`,
     "gatsby-plugin-sass",
@@ -27,3 +28,5 @@ module.exports = {
     },
   ],
 };
+
+export default config;

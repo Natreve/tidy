@@ -1,9 +1,12 @@
 @import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
 
 :root {
-  --font: "DM Sans", sans-serif;
+  --text-color: rgba(255, 255, 255, 0.6);
+  --font: DM Sans, "Ubuntu";
+  --bg-color: rgb(51, 51, 51);
+  --bg-secondary-color: rgba(0, 0, 0, 0.25);
+  --link-color: #2678b6;
 }
-
 *::before,
 *::after {
   box-sizing: border-box;
@@ -19,20 +22,26 @@
 */
 html,
 body {
+  margin: 0;
   height: 100%;
   font-family: var(--font);
   font-size: 15px;
-  background: var(--tg-theme-bg-color, #ffffff);
-  color: var(--tg-theme-text-color, #455963);
-  color-scheme: var(--tg-color-scheme);
+  background: var(--bg-color);
+  color: var(--text-color);
   a {
-    color: var(--tg-theme-link-color, #2678b6);
+    color: var(--link-color);
   }
 }
+// body {
+//   margin: 0;
+//   font-family: DM Sans, "Ubuntu";
+//   color: rgba(255, 255, 255, 0.6);
+//   background-color: rgb(51, 51, 51);
+// }
 main,
 section {
   height: 100vh;
-  margin: 0 20px;
+  margin: 0;
 }
 /*
   Typographic tweaks!

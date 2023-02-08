@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as css from "./css.module.scss";
 import { DateTime } from "luxon";
-import telegramParamToJson from "utils/telegramParamToJson";
+import telegramParamToJson from "../../utils/telegramParamToJson";
 const Card = (props) => {
   return (
     <div className={css.card}>
