@@ -4,6 +4,7 @@
  * https://codepen.io/KennySing/pen/poVGwj
  * **/
 import * as React from "react";
+import PropTypes from "prop-types";
 import { DateTime } from "luxon";
 import { v4 } from "uuid";
 import "./style.scss";
@@ -16,14 +17,7 @@ export type CalendarEvent = {
   assigned?: string;
   options?: { [key: string]: any };
 };
-type DayType = {
-  selected?: boolean;
-  isToday: boolean;
-  isCurrentMonth: boolean;
-  number: number;
-  date: DateTime;
-  events?: CalendarEvent[];
-};
+
 type WeekType = {
   date: DateTime;
   events?: CalendarEvent[];
@@ -196,15 +190,33 @@ class Week extends React.Component<WeekType> {
     return <tr className="week">{days}</tr>;
   }
 }
+type DayType = {
+  selected?: boolean;
+  isToday: boolean;
+  isCurrentMonth: boolean;
+  number: number;
+  date: DateTime;
+
+  events?: CalendarEvent[];
+  onDayClick?: (e: React.MouseEvent, date: DateTime) => void;
+};
 class Day extends React.Component<DayType> {
+  onDayClick = (e: React.MouseEvent, date: DateTime) => {
+    if (DateTime.now() > date) return; //can't set events in the past or present only in the future
+    console.log(date.toFormat("dd LLL, yyyy"));
+    if (!this.props.onDayClick) return;
+
+    this.props.onDayClick(e, date);
+  };
   render() {
-    const { isToday, number, events, isCurrentMonth, date } = this.props;
+    const { isToday, number, events, date } = this.props;
 
     return (
       <td
-        className={`day ${isToday ? "today" : ""} ${
-          !isCurrentMonth ? "inactive" : ""
+        className={`day${isToday ? " today" : ""}${
+          DateTime.now() > date ? " inactive" : ""
         }`}
+        onClick={(e) => this.onDayClick(e, date)}
       >
         <span className="number">{number}</span>
         {events?.map((event) => {
