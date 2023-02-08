@@ -51,8 +51,8 @@ export const get = async (id: string | string[]) => {
     throw Error("Error getting job/jobs", { cause: error });
   }
 };
-export const useGetUnclaimed = () => {
-  const [jobs, setJobs] = useState<Job[]>([]);
+export const useGetUnclaimed = (cb?: (x: [Job[], boolean]) => void) => {
+  const [jobs, setJobs] = useState<[Job[], boolean]>([[], false]);
   useEffect(() => {
     const getUnclaimed = async () => {
       const firestore = getFirestore();
@@ -61,8 +61,12 @@ export const useGetUnclaimed = () => {
 
       const q = query(db, where("status", "==", "unclaimed"));
       const snapshots = await getDocs(q);
-      window.Telegram.WebApp.ready();
-      if (snapshots.empty) return [];
+      //still set the state to true to indicate that the jobs even though empty have been loaded
+      if (snapshots.empty) {
+        if (cb) cb([claims, true]);
+        setJobs([claims, true]);
+        return;
+      }
 
       snapshots.forEach((snapshot) => {
         let data = snapshot.data() as FirebaseJob;
@@ -70,7 +74,8 @@ export const useGetUnclaimed = () => {
         job.date = DateTime.fromJSDate(data.date.toDate());
         claims.push(job);
       });
-      setJobs(claims);
+      setJobs([claims, true]);
+      if (cb) cb([claims, true]);
     };
     getUnclaimed();
   }, []);
