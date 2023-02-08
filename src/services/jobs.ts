@@ -61,7 +61,7 @@ export const useGetUnclaimed = () => {
 
       const q = query(db, where("status", "==", "unclaimed"));
       const snapshots = await getDocs(q);
-
+      window.Telegram.WebApp.ready();
       if (snapshots.empty) return [];
 
       snapshots.forEach((snapshot) => {

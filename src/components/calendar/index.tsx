@@ -5,6 +5,7 @@
  * **/
 import * as React from "react";
 import { DateTime } from "luxon";
+import { v4 } from "uuid";
 import "./style.scss";
 type status = "claimed" | "unclaimed" | "completed";
 export type CalendarEvent = {
@@ -80,13 +81,7 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
     let monthNumber = month.month;
 
     while (!done) {
-      weeks.push(
-        <Week
-          key={crypto.randomUUID()}
-          date={date}
-          events={this.props.events}
-        />
-      );
+      weeks.push(<Week key={v4()} date={date} events={this.props.events} />);
       date = date.plus({ week: 1 }); //next week of month
       done = count++ > 2 && monthNumber !== date.month;
       monthNumber = date.month;
@@ -194,7 +189,7 @@ class Week extends React.Component<WeekType> {
         events,
       };
 
-      days.push(<Day key={crypto.randomUUID()} {...day} />);
+      days.push(<Day key={v4()} {...day} />);
       date = date.plus({ day: 1 });
     }
 
