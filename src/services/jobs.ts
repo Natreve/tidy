@@ -59,7 +59,11 @@ export const useGetUnclaimed = (cb?: (x: [Job[], boolean]) => void) => {
       const db = collection(firestore, "jobs");
       const claims: Job[] = [];
 
-      const q = query(db, where("status", "==", "unclaimed"));
+      const q = query(
+        db,
+        where("status", "==", "unclaimed"),
+        where("date", ">=", Timestamp.now())
+      );
       const snapshots = await getDocs(q);
       //still set the state to true to indicate that the jobs even though empty have been loaded
       if (snapshots.empty) {

@@ -203,7 +203,7 @@ type DayType = {
 class Day extends React.Component<DayType> {
   onDayClick = (e: React.MouseEvent, date: DateTime) => {
     if (DateTime.now() > date) return; //can't set events in the past or present only in the future
-    console.log(date.toFormat("dd LLL, yyyy"));
+    
     if (!this.props.onDayClick) return;
 
     this.props.onDayClick(e, date);
