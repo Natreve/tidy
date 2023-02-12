@@ -18,6 +18,7 @@ const config: GatsbyConfig = {
     "gatsby-plugin-image",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
+    `gatsby-plugin-offline`,
     {
       resolve: "gatsby-source-filesystem",
       options: {
@@ -25,6 +26,18 @@ const config: GatsbyConfig = {
         path: "./src/images/",
       },
       __key: "images",
+    },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Tidy Calendar`,
+        short_name: `Tidy`,
+        start_url: `/`,
+        background_color: `#212121`,
+        theme_color: `#212121`,
+        display: `standalone`,
+        icon: `src/images/icon.png`,
+      },
     },
   ],
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import Icons from "./icons.svg";
+import Icons from "../../images/icons.svg";
 import PropTypes from "prop-types";
 import "./style.scss";
 
