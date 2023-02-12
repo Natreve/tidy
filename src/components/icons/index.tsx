@@ -1,5 +1,5 @@
 import React from "react";
-import Icons from "../../images/icons.svg";
+import Icons from "./icons.svg";
 import PropTypes from "prop-types";
 import "./style.scss";
 
@@ -41,7 +41,6 @@ class Icon extends React.Component<IconProps, IconState> {
   };
   render() {
     const { props, state } = this;
-
     return (
       <svg
         className={`${state.selected ? "selected " : ""}icon`}
@@ -56,7 +55,7 @@ class Icon extends React.Component<IconProps, IconState> {
 }
 Icon.propTypes = {
   name: PropTypes.string,
-  // color: PropTypes.string,
+  color: PropTypes.string,
   size: PropTypes.number,
   click: PropTypes.func,
   selected: PropTypes.bool,

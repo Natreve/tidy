@@ -3,13 +3,17 @@ declare module "*.module.scss" {
   export default content;
 }
 declare module "*.svg" {
-  const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+  const content: any;
   export default content;
 }
-declare interface Telegram {
-  WebApp: { ready: function };
-}
+// declare module "*.svg" {
+//   const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+//   export default content;
+// }
+// declare interface Telegram {
+//   WebApp: { ready: function };
+// }
 
-declare interface Window {
-  Telegram: Telegram;
-}
+// declare interface Window {
+//   Telegram: Telegram;
+// }

@@ -24,4 +24,4 @@ const App = () => {
 
 export default App;
 
-export const Head = () => <title>Home Page</title>;
+export const Head = () => <title>Tidy Calendar</title>;
