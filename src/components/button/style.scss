@@ -1,0 +1,16 @@
+button {
+  all: unset;
+}
+button:focus-visible {
+  outline: 1px solid var(--your-color);
+}
+.claim {
+  background-color: #91c33b;
+  padding: 0.5em 1em;
+  border-radius: .2rem;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 1em 0;
+}

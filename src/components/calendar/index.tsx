@@ -4,23 +4,26 @@
  * https://codepen.io/KennySing/pen/poVGwj
  * **/
 import * as React from "react";
-import PropTypes from "prop-types";
 import { DateTime } from "luxon";
 import { v4 } from "uuid";
+import Icon from "../icons";
 import "./style.scss";
 type status = "claimed" | "unclaimed" | "completed";
-export type CalendarEvent = {
-  id: string;
-  name: string;
-  date: DateTime;
-  status?: status;
-  assigned?: string;
-  options?: { [key: string]: any };
-};
-
 type WeekType = {
   date: DateTime;
   events?: CalendarEvent[];
+  onDayClick?: (date: DateTime) => void;
+  onEventClick?: (event: CalendarEvent) => void;
+};
+type DayType = {
+  selected?: boolean;
+  isToday: boolean;
+  isCurrentMonth: boolean;
+  number: number;
+  date: DateTime;
+  events?: CalendarEvent[];
+  onDayClick?: (date: DateTime) => void;
+  onEventClick?: (event: CalendarEvent) => void;
 };
 interface CalendarState {
   month: any;
@@ -29,6 +32,18 @@ interface CalendarState {
 
 export type CalendarProps = {
   events?: CalendarEvent[];
+  onDayClick?: (date: DateTime) => void;
+  onEventClick?: (event: CalendarEvent) => void;
+};
+export type CalendarEvent = {
+  id: string;
+  name: string;
+  date: DateTime;
+  status?: status;
+  assigned?: string;
+  options?: { [key: string]: any };
+  onDayClick?: (date: DateTime) => void;
+  onEventClick?: (event: CalendarEvent) => void;
 };
 
 export class Calendar extends React.Component<CalendarProps, CalendarState> {
@@ -39,7 +54,12 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
       selected: DateTime.now().day,
     };
   }
+  _onDayClick = () => {};
+  onDayClick = (onDayClick: () => void) => (this._onDayClick = onDayClick);
 
+  _onEventClick = (event: CalendarEvent) => {};
+  onEventClick = (onEventClick: () => void) =>
+    (this._onEventClick = onEventClick);
   prev = () => {
     const { month } = this.state;
     const now = DateTime.now();
@@ -54,12 +74,6 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
     this.setState({ month: month.plus({ month: 1 }) });
     return this;
   };
-  select(day: number) {
-    // this.setState({
-    //   selected: day.date,
-    //   month: day.date.clone(),
-    // });
-  }
 
   renderWeeks = (month: DateTime) => {
     const weeks = [];
@@ -75,7 +89,17 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
     let monthNumber = month.month;
 
     while (!done) {
-      weeks.push(<Week key={v4()} date={date} events={this.props.events} />);
+      weeks.push(
+        <Week
+          key={v4()}
+          date={date}
+          events={this.props.events}
+          onEventClick={(event) => {
+            this._onEventClick(event);
+            if (this.props.onEventClick) this.props.onEventClick(event);
+          }}
+        />
+      );
       date = date.plus({ week: 1 }); //next week of month
       done = count++ > 2 && monthNumber !== date.month;
       monthNumber = date.month;
@@ -89,40 +113,11 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
     return (
       <div className="calendar">
         <div className="header">
-          <svg
-            width="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            onClick={this.prev}
-          >
-            <path
-              d="M15 19.9201L8.47997 13.4001C7.70997 12.6301 7.70997 11.3701 8.47997 10.6001L15 4.08008"
-              stroke="#FFFF"
-              strokeWidth="1.5"
-              strokeMiterlimit="10"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-
           <h3>{this.state.month.toFormat("LLLL yyyy")}</h3>
-          <svg
-            width="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            onClick={this.next}
-          >
-            <path
-              d="M8.91003 19.9201L15.43 13.4001C16.2 12.6301 16.2 11.3701 15.43 10.6001L8.91003 4.08008"
-              stroke="#FFFF"
-              strokeWidth="1.5"
-              strokeMiterlimit="10"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <div className="navigation">
+            <Icon name="arrow-left" click={() => this.prev()} />
+            <Icon name="arrow-right" click={() => this.next()} />
+          </div>
         </div>
         <table className="month">
           <thead>
@@ -138,30 +133,6 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
           </thead>
           <tbody>{this.renderWeeks(this.state.month)}</tbody>
         </table>
-        {/* <div className="v-info">
-          <section id="1" className="v-section">
-            <p className="v-section_item">
-              <span className="v-section_line"></span>
-              <span className="v-section_time">9:00 pm </span>
-              Complete birthday party preparations: buy baloons and chocolate.
-            </p>
-            <p className="v-section_item">
-              <span className="v-section_line"></span>
-              <span className="v-section_time">12:45 pm</span>
-              Watch series.
-            </p>
-            <p className="v-section_item">
-              <span className="v-section_line"></span>
-              <span className="v-section_time">15:00 pm</span>
-              Video calling with Tom.
-            </p>
-            <p className="v-section_item">
-              <span className="v-section_line"></span>
-              <span className="v-section_time">19:00 pm</span>
-              Buy theater tickets
-            </p>
-          </section>
-        </div> */}
       </div>
     );
   }
@@ -183,30 +154,28 @@ class Week extends React.Component<WeekType> {
         events,
       };
 
-      days.push(<Day key={v4()} {...day} />);
+      days.push(
+        <Day key={v4()} {...day} onEventClick={this.props.onEventClick} />
+      );
       date = date.plus({ day: 1 });
     }
 
     return <tr className="week">{days}</tr>;
   }
 }
-type DayType = {
-  selected?: boolean;
-  isToday: boolean;
-  isCurrentMonth: boolean;
-  number: number;
-  date: DateTime;
 
-  events?: CalendarEvent[];
-  onDayClick?: (e: React.MouseEvent, date: DateTime) => void;
-};
 class Day extends React.Component<DayType> {
   onDayClick = (e: React.MouseEvent, date: DateTime) => {
     if (DateTime.now() > date) return; //can't set events in the past or present only in the future
-    
+
     if (!this.props.onDayClick) return;
 
-    this.props.onDayClick(e, date);
+    this.props.onDayClick(date);
+  };
+  onEventClick = (e: React.MouseEvent, event: CalendarEvent) => {
+    //check if event already claimed
+    if (!this.props.onEventClick) return;
+    this.props.onEventClick(event);
   };
   render() {
     const { isToday, number, events, date } = this.props;
@@ -225,6 +194,10 @@ class Day extends React.Component<DayType> {
             <span
               key={event.id}
               className="event"
+              onClick={(e) => {
+                if (DateTime.now() > date) return; // can't on the same day
+                this.onEventClick(e, event);
+              }}
               style={{
                 background: event.options?.background || "rgba(0, 0, 0, 0.3)",
               }}

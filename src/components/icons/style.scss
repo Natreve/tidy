@@ -1,0 +1,10 @@
+.icon {
+  cursor: pointer;
+  .selected {
+    path,
+    svg,
+    use {
+      stroke: var(--bg-color) !important;
+    }
+  }
+}
