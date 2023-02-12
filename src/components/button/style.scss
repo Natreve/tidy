@@ -5,9 +5,9 @@ button:focus-visible {
   outline: 1px solid var(--your-color);
 }
 .claim {
-  background-color: #91c33b;
+  background-color: hsl(150deg 50% 50%);
   padding: 0.5em 1em;
-  border-radius: .2rem;
+  border-radius: 0.2rem;
   display: flex;
   justify-content: center;
   cursor: pointer;
