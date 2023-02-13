@@ -183,7 +183,7 @@ class Day extends React.Component<DayType> {
     return (
       <td
         className={`day${isToday ? " today" : ""}${
-          DateTime.now() > date ? " inactive" : ""
+          DateTime.now().minus({ day: 1 }) > date ? " inactive" : ""
         }`}
         onClick={(e) => this.onDayClick(e, date)}
       >
@@ -195,7 +195,7 @@ class Day extends React.Component<DayType> {
               key={event.id}
               className="event"
               onClick={(e) => {
-                if (DateTime.now() > date) return; // can't on the same day
+                // if (DateTime.now() > date) return; // can't on the same day
                 this.onEventClick(e, event);
               }}
               style={{
