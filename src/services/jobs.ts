@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getFirestore, collection, Timestamp } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { DateTime } from "luxon";
 export type status = "claimed" | "unclaimed" | "completed";
@@ -49,6 +54,27 @@ export const get = async (id: string | string[]) => {
     return jobs;
   } catch (error) {
     throw Error("Error getting job/jobs", { cause: error });
+  }
+};
+export const claim = async (id: string, uid: string) => {
+  const firestore = getFirestore();
+  const db = collection(firestore, "jobs");
+  try {
+    const job = await get(id);
+    console.log(job);
+
+    // updateDoc(doc(db, id), { assigned: uid, status: "claimed" });
+  } catch (error) {
+    throw Error("Error claiming job", { cause: error });
+  }
+};
+export const unclaim = async (id: string) => {
+  const firestore = getFirestore();
+  const db = collection(firestore, "jobs");
+  try {
+    updateDoc(doc(db, id), { assigned: null, status: "unclaimed" });
+  } catch (error) {
+    throw Error("Error claiming job", { cause: error });
   }
 };
 export const useGetUnclaimed = (cb?: (x: [Job[], boolean]) => void) => {

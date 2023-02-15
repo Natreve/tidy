@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useGetUnclaimed } from "../services/jobs";
+import { useGetUnclaimed, claim, unclaim } from "../services/jobs";
 import { Calendar, CalendarEvent } from "../components/calendar";
 import { Script } from "gatsby";
 import { Popup } from "../components/popup";
@@ -7,11 +7,12 @@ const App = () => {
   const [jobs, loaded] = useGetUnclaimed();
   const popup = React.createRef<Popup>();
   React.useEffect(() => {
-    //if jobs have been loaded telegram app is ready
-    if (loaded) window.Telegram.WebApp.ready();
+    if (!loaded) return;
+    window.Telegram.WebApp.ready();
+    console.log(window.Telegram.WebApp.initData);
   });
   const onEventClick = (event: CalendarEvent) => {
-    popup.current?.show(event);
+    popup.current?.show(event).onAction((action) => {});
   };
   return (
     <main style={{ position: "relative" }}>
