@@ -1,7 +1,7 @@
-const  telegramParamToJson = (queryString) => {
+const telegramParamToJson = (queryString: string) => {
   const params = new URLSearchParams(queryString);
 
-  const json = {};
+  const json: { [key: string]: any } = {};
   for (const [key, value] of params) {
     if (key === "user") {
       json[key] = JSON.parse(decodeURIComponent(value));
@@ -11,4 +11,4 @@ const  telegramParamToJson = (queryString) => {
   }
   return json;
 };
-export default telegramParamToJson
+export default telegramParamToJson;
