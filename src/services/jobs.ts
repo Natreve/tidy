@@ -59,8 +59,9 @@ export const useGetUnclaimed = (cb?: (x: [Job[], boolean]) => void) => {
       const db = collection(firestore, "jobs");
       const claims: Job[] = [];
       const date = Timestamp.fromMillis(
-        DateTime.now().minus({ day: 1 }).toMillis()
+        DateTime.now().minus({ day: 31 }).toMillis()
       );
+
       const q = query(
         db,
         where("status", "==", "unclaimed"),

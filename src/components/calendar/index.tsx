@@ -62,9 +62,9 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
     (this._onEventClick = onEventClick);
   prev = () => {
     const { month } = this.state;
-    const now = DateTime.now();
-    // can't go back in time
-    if (month.minus({ month: 1 }).month < now.month) return;
+    // const now = DateTime.now();
+    // can't go back in time or can you
+    // if (month.minus({ month: 1 }).month < now.month) return;
 
     this.setState({ month: month.minus({ month: 1 }) });
     return this;
@@ -173,7 +173,6 @@ class Day extends React.Component<DayType> {
     this.props.onDayClick(date);
   };
   onEventClick = (e: React.MouseEvent, event: CalendarEvent) => {
-    //check if event already claimed
     if (!this.props.onEventClick) return;
     this.props.onEventClick(event);
   };
@@ -182,9 +181,10 @@ class Day extends React.Component<DayType> {
 
     return (
       <td
-        className={`day${isToday ? " today" : ""}${
-          DateTime.now().minus({ day: 1 }) > date ? " inactive" : ""
-        }`}
+        className={`day${isToday ? " today" : ""}`}
+        // className={`day${isToday ? " today" : ""}${
+        //   DateTime.now().minus({ day: 1 }) > date ? " inactive" : ""
+        // }`}
         onClick={(e) => this.onDayClick(e, date)}
       >
         <span className="number">{number}</span>
